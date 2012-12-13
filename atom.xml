@@ -4,7 +4,7 @@
   <title><![CDATA[Usotsuki Tech Log]]></title>
   <link href="http://monzou.github.com/atom.xml" rel="self"/>
   <link href="http://monzou.github.com/"/>
-  <updated>2012-12-14T00:38:30+09:00</updated>
+  <updated>2012-12-14T01:25:48+09:00</updated>
   <id>http://monzou.github.com/</id>
   <author>
     <name><![CDATA[monzou]]></name>
@@ -12,5 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Octopress]]></title>
+    <link href="http://monzou.github.com/blog/2012/12/14/hello-octopress/"/>
+    <updated>2012-12-14T01:14:00+09:00</updated>
+    <id>http://monzou.github.com/blog/2012/12/14/hello-octopress</id>
+    <content type="html"><![CDATA[<p>日記用の軽いブログなどは幾つか持っているのですが、前々から技術系のブログをひとつ作りたかったので Octopress + GitHub Pages で構築してみました。人に見られることを想定したブログというものはここ数年作っていなかったので本当に久しぶり。主に技術ネタを扱っていきたいと思っているので横幅を広く取れるテーマにしてみました。以下備忘録。</p>
+
+<h2>ブログの設定を変更したとき</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git add .
+</span><span class='line'>$ git commit -m 'message'
+</span><span class='line'>$ git push origin source</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>記事を書くとき</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bundle exec rake new_post["title_in_english"]
+</span><span class='line'>$ vim source/_posts/your_new_post.markdown
+</span><span class='line'>$ bundle exec rake generate
+</span><span class='line'>$ bundle exec rake preview -- http://localhost:4000
+</span><span class='line'>$ bundle exec rake gen_deploy</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
 </feed>

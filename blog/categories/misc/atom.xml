@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Misc | Usotsuki Tech Log]]></title>
+  <link href="http://monzou.github.com/blog/categories/misc/atom.xml" rel="self"/>
+  <link href="http://monzou.github.com/"/>
+  <updated>2012-12-14T01:25:48+09:00</updated>
+  <id>http://monzou.github.com/</id>
+  <author>
+    <name><![CDATA[monzou]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Octopress]]></title>
+    <link href="http://monzou.github.com/blog/2012/12/14/hello-octopress/"/>
+    <updated>2012-12-14T01:14:00+09:00</updated>
+    <id>http://monzou.github.com/blog/2012/12/14/hello-octopress</id>
+    <content type="html"><![CDATA[<p>日記用の軽いブログなどは幾つか持っているのですが、前々から技術系のブログをひとつ作りたかったので Octopress + GitHub Pages で構築してみました。人に見られることを想定したブログというものはここ数年作っていなかったので本当に久しぶり。主に技術ネタを扱っていきたいと思っているので横幅を広く取れるテーマにしてみました。以下備忘録。</p>
+
+<h2>ブログの設定を変更したとき</h2>
+
+<p><code>
+$ git add .
+$ git commit -m 'message'
+$ git push origin source
+</code></p>
+
+<h2>記事を書くとき</h2>
+
+<p><code>
+$ bundle exec rake new_post["title_in_english"]
+$ vim source/_posts/your_new_post.markdown
+$ bundle exec rake generate
+$ bundle exec rake preview -- http://localhost:4000
+$ bundle exec rake gen_deploy
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>
