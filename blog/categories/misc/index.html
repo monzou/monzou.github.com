@@ -19,6 +19,50 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
 	
+  <script type="text/javascript">
+    (function() {
+      var s = document.createElement('script');
+      s.src = 'http://s.hatena.ne.jp/js/HatenaStar.js';
+      s.async = true;
+      s.onload = function () {
+        (function() {
+          var base = Hatena.Star.EntryLoader.getElementByConfigSelector;
+          Hatena.Star.EntryLoader.getElementByConfigSelector = function(selector, parent) {
+            var links, n, i, link, a;
+            if (selector == 'link[rel="canonical"]') {
+              links = document.getElementsByTagName('link');
+              for (i = 0, n = links.length; i < n; ++i) {
+                link = links[i];
+                if (link.rel == 'canonical') {
+                  a = document.createElement('a');
+                  a.setAttribute('href', link.href);
+                  return a.cloneNode(false);
+                }
+              }
+            }
+            else {
+              return base(selector, parent);
+            }
+            return null;
+          };
+        })();
+        Hatena.Star.Token = '0cf10e1214ee7f5eb0d5b7bb0065b39975556ccb';
+        Hatena.Star.SiteConfig = {
+          entryNodes: {
+            '#content article': {
+              
+                uri: '.title a',
+              
+              title: '.title',
+              container: '.meta'
+            }
+          }
+        };
+      };
+      document.getElementsByTagName('head')[0].appendChild(s);
+    }());
+  </script>
+
 </head>
 
 <body>
@@ -60,20 +104,6 @@
 		<div class="mid-col">
 			
 				
-<div id="banner" class="inner">
-	<div class="container">
-		<ul class="feed"></ul>
-	</div>
-	<small><a href="http://twitter.com/monzou">monzou</a> @ <a href="http://twitter.com">Twitter</a></small>
-	<div class="loading">Loading...</div>
-</div>
-<script src="/javascripts/twitter.js"></script>
-<script type="text/javascript">
-	(function($){
-		$('#banner').getTwitterFeed('monzou', 5, false);
-	})(jQuery);
-</script>
-
 			
 			<div class="mid-col-container">
 				<div id="content" class="inner">
@@ -118,7 +148,7 @@ Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Sha
 
 
 <script type="text/javascript">
-      var disqus_shortname = 'monzou';
+      var disqus_shortname = 'usotsukitechlog';
       
         
         var disqus_script = 'count.js';
@@ -131,6 +161,18 @@ Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Sha
 </script>
 
 
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33055326-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 
 
 
