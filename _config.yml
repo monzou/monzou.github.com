@@ -65,8 +65,8 @@ github_skip_forks: true
 
 # Twitter
 twitter_user: monzou
-twitter_tweet_count: 5
-twitter_show_replies: false
+twitter_tweet_count: 0
+twitter_show_replies: true
 twitter_follow_button: true
 twitter_show_follower_count: false
 twitter_tweet_button: true
@@ -89,11 +89,14 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: monzou
+disqus_short_name: usotsukitechlog
 disqus_show_comment_count: false
 
 # Google Analytics
-google_analytics_tracking_id:
+google_analytics_tracking_id: UA-33055326-1
 
 # Facebook Like
-facebook_like: false
+facebook_like: true
+
+# Hatena Star
+hatena_star_token: 0cf10e1214ee7f5eb0d5b7bb0065b39975556ccb

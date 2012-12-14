@@ -1,2 +1,17 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+.hatena-star-comment-container, .hatena-star-star-container {
+  img {
+    @include border-radius(0);
+    @include box-shadow(none);
+  }
+}
+
+body > div[style] > div[style] {
+  background: inherit;
+  border: 0;
+
+  > blockquote[style] {
+    border: 0;
+  }
+}

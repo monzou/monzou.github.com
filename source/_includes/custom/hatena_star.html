@@ -1,0 +1,47 @@
+{% if site.hatena_star_token %}
+  <script type="text/javascript">
+    (function() {
+      var s = document.createElement('script');
+      s.src = 'http://s.hatena.ne.jp/js/HatenaStar.js';
+      s.async = true;
+      s.onload = function () {
+        (function() {
+          var base = Hatena.Star.EntryLoader.getElementByConfigSelector;
+          Hatena.Star.EntryLoader.getElementByConfigSelector = function(selector, parent) {
+            var links, n, i, link, a;
+            if (selector == 'link[rel="canonical"]') {
+              links = document.getElementsByTagName('link');
+              for (i = 0, n = links.length; i < n; ++i) {
+                link = links[i];
+                if (link.rel == 'canonical') {
+                  a = document.createElement('a');
+                  a.setAttribute('href', link.href);
+                  return a.cloneNode(false);
+                }
+              }
+            }
+            else {
+              return base(selector, parent);
+            }
+            return null;
+          };
+        })();
+        Hatena.Star.Token = '{{ site.hatena_star_token }}';
+        Hatena.Star.SiteConfig = {
+          entryNodes: {
+            '#content article': {
+              {% if page.single %}
+                uri: 'link[rel="canonical"]',
+              {% else %}
+                uri: '.title a',
+              {% endif %}
+              title: '.title',
+              container: '.meta'
+            }
+          }
+        };
+      };
+      document.getElementsByTagName('head')[0].appendChild(s);
+    }());
+  </script>
+{% endif %}
