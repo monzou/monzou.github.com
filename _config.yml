@@ -2,8 +2,8 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://monzou.github.com
-title: Usotsuki Tech Log
+url: http://tech.usopla.com
+title: tech.usopla.com
 subtitle: Do you believe in the magic of make-believe ?
 author: monzou
 simple_search: http://google.com/search
@@ -89,7 +89,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: usotsukitechlog
+disqus_short_name: tech-usopla
 disqus_show_comment_count: false
 
 # Google Analytics
