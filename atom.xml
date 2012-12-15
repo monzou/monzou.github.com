@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Usotsuki Tech Log]]></title>
-  <link href="http://monzou.github.com/atom.xml" rel="self"/>
-  <link href="http://monzou.github.com/"/>
-  <updated>2012-12-15T15:36:21+09:00</updated>
-  <id>http://monzou.github.com/</id>
+  <title><![CDATA[tech.usopla.com]]></title>
+  <link href="http://tech.usopla.com/atom.xml" rel="self"/>
+  <link href="http://tech.usopla.com/"/>
+  <updated>2012-12-15T22:15:47+09:00</updated>
+  <id>http://tech.usopla.com/</id>
   <author>
     <name><![CDATA[monzou]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hello Octopress]]></title>
-    <link href="http://monzou.github.com/blog/2012/12/14/hello-octopress/"/>
+    <link href="http://tech.usopla.com/blog/2012/12/14/hello-octopress/"/>
     <updated>2012-12-14T01:14:00+09:00</updated>
-    <id>http://monzou.github.com/blog/2012/12/14/hello-octopress</id>
+    <id>http://tech.usopla.com/blog/2012/12/14/hello-octopress</id>
     <content type="html"><![CDATA[<p>前々から日記以外に技術系のブログをひとつ作りたかったので Octopress + GitHub Pages で構築してみました。人に見られることを想定したブログというものはここ数年作っていなかったので本当に久しぶり。主に技術ネタを扱っていきたいと思っているので横幅を広く取れるテーマにしてみました。以下備忘録。</p>
 
 <h2>ブログの設定を変更したとき</h2>
