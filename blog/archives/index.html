@@ -12,57 +12,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 	<link href="/atom.xml" rel="alternate" title="Usotsuki Tech Log" type="application/atom+xml">
-	<link rel="canonical" href="">
+  
+  <link rel="canonical" href="http://monzou.github.com/blog/archives/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
 	
-  <script type="text/javascript">
-    (function() {
-      var s = document.createElement('script');
-      s.src = 'http://s.hatena.ne.jp/js/HatenaStar.js';
-      s.async = true;
-      s.onload = function () {
-        (function() {
-          var base = Hatena.Star.EntryLoader.getElementByConfigSelector;
-          Hatena.Star.EntryLoader.getElementByConfigSelector = function(selector, parent) {
-            var links, n, i, link, a;
-            if (selector == 'link[rel="canonical"]') {
-              links = document.getElementsByTagName('link');
-              for (i = 0, n = links.length; i < n; ++i) {
-                link = links[i];
-                if (link.rel == 'canonical') {
-                  a = document.createElement('a');
-                  a.setAttribute('href', link.href);
-                  return a.cloneNode(false);
-                }
-              }
-            }
-            else {
-              return base(selector, parent);
-            }
-            return null;
-          };
-        })();
-        Hatena.Star.Token = '0cf10e1214ee7f5eb0d5b7bb0065b39975556ccb';
-        Hatena.Star.SiteConfig = {
-          entryNodes: {
-            '#content article': {
-              
-                uri: '.title a',
-              
-              title: '.title',
-              container: '.meta'
-            }
-          }
-        };
-      };
-      document.getElementsByTagName('head')[0].appendChild(s);
-    }());
-  </script>
-
 </head>
 
 <body>
