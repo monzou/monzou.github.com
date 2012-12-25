@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | tech.usopla.com]]></title>
   <link href="http://tech.usopla.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://tech.usopla.com/"/>
-  <updated>2012-12-26T01:03:52+09:00</updated>
+  <updated>2012-12-26T01:05:41+09:00</updated>
   <id>http://tech.usopla.com/</id>
   <author>
     <name><![CDATA[monzou]]></name>
@@ -55,7 +55,7 @@ fields -&gt;
   sex (java.lang.String)
 </code></p>
 
-<p>このように編集後のクラス定義を元にファイルが自動生成されています。ここで実行しているのは <a href="https://github.com/monzou/honeyant/blob/master/honeyant-example/src/main/java/monzou/honeyant/example/task/DumpTask.java"><code>DumpTask</code></a> というサンプルの Ant タスクで, クラス情報をリフレクションして適当に出力しています。</p>
+<p>このように編集後のクラス定義を元にファイルが自動生成されています。ここで実行しているのは <a href="https://github.com/monzou/honeyant/blob/master/honeyant-example/src/main/java/com/usopla/honeyant/example/task/DumpTask.java"><code>DumpTask</code></a> というサンプルの Ant タスクで, クラス情報をリフレクションして適当に出力しています。</p>
 
 <h2>何故つくったか？</h2>
 
