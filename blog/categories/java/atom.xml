@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | tech.usopla.com]]></title>
   <link href="http://tech.usopla.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://tech.usopla.com/"/>
-  <updated>2012-12-26T00:22:01+09:00</updated>
+  <updated>2012-12-26T01:03:52+09:00</updated>
   <id>http://tech.usopla.com/</id>
   <author>
     <name><![CDATA[monzou]]></name>
@@ -32,7 +32,7 @@ Buildfile: xxx\honeyant-example\honeyant.xml</p>
 
 <p>honeyant:</p>
 
-<pre><code> [echo] HoneyAnt incremental build: monzou.honeyant.example.source.Person (xxx\honeyant-example\src\main\java\monzou\honeyant\example\source\Person.java)
+<pre><code> [echo] HoneyAnt incremental build: com.usopla.honeyant.example.source.Person (xxx\honeyant-example\src\main\java\com\usopla\honeyant\example\source\Person.java)
  [dump] dump to xxx\honeyant-example\dest\dump.txt
 </code></pre>
 
@@ -46,9 +46,9 @@ Total time: 0 seconds
 <p>すると自動的に Ant が実行され, このようなログが表示されます。dump.txt を見てみましょう。</p>
 
 <p><code>
-path=xxx\honeyant-example\src\main\java\monzou\honeyant\example\source\Person.java
-class : monzou.honeyant.example.source.Person
-package : monzou.honeyant.example.source
+path=xxx\honeyant-example\src\main\java\com\usopla\honeyant\example\source\Person.java
+class : com.usopla.honeyant.example.source.Person
+package : com.usopla.honeyant.example.source
 fields -&gt;
   name (java.lang.String)
   age (int)
