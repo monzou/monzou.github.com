@@ -7,7 +7,8 @@
 	<meta name="author" content="monzou">
 
 	
-	<meta name="description" content="勤務先は未だに Subversion を使っているのですが、いい加減 git を使いましょうということで先日勉強会を開催したのでそのときに使用した資料を Speaker Deck にアップロードしてみました。 &hellip;">
+	<meta name="description" content="少し時間があったので, HoneyAnt という Eclipse Plugin を公開しました。
+これは Eclipse 上でインクリメンタルに Ant を実行するというプラグインで, 特定のアノテーションが付いたファイルを編集すると, 自動的に Ant が実行されるという機能を提供します。 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -63,6 +64,330 @@
 			
 			<div class="mid-col-container">
 				<div id="content" class="inner">
+
+
+    <article class="post">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-26T00:02:00+09:00" pubdate data-updated="true">2012/12/26</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/java/'>Java</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title"><a href="/blog/2012/12/26/honeyant/">HoneyAnt</a></h1>
+	<div class="entry-content">
+		<p>少し時間があったので, <a href="https://github.com/monzou/honeyant">HoneyAnt</a> という Eclipse Plugin を公開しました。
+これは Eclipse 上でインクリメンタルに <a href="http://ant.apache.org/">Ant</a> を実行するというプラグインで, 特定のアノテーションが付いたファイルを編集すると, 自動的に Ant が実行されるという機能を提供します。</p>
+
+<h2>HoneyAnt の使い方</h2>
+
+<p>HoneyAnt を clone すると <code>honeyant-feature-updatesite</code> というプロジェクトがあるので, これを Eclipse でインストールしてください。再起動すると, Java プロジェクトのプロパティに「HoneyAnt」という項が増えているはずです。サンプルとして <code>honeyant-example</code> というプロジェクトも用意しているので, ひとまずこれをベースに説明します。</p>
+
+<p>honeyant-example のプロパティを見ると, HoneyAnt が有効になっており, [ Builders ] に HoneyAnt Runner というビルダが追加されていることが分かると思います。これがインクリメンタルビルドを実行するビルダです。次に Person.java というファイルを開いてください。ただのバリューオブジェクトですが, <code>@HoneyAnt</code> というアノテーションを付与しています（※アノテーションは自由に指定出来ます）。ではここに <code>String sex</code> というプロパティを追加して保存してみましょう。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Buildfile: xxx\honeyant-example\honeyant.xml
+</span><span class='line'>
+</span><span class='line'>honeyant:
+</span><span class='line'>     [echo] HoneyAnt incremental build: monzou.honeyant.example.source.Person (xxx\honeyant-example\src\main\java\monzou\honeyant\example\source\Person.java)
+</span><span class='line'>     [dump] dump to xxx\honeyant-example\dest\dump.txt
+</span><span class='line'>
+</span><span class='line'>refresh:
+</span><span class='line'>BUILD SUCCESSFUL
+</span><span class='line'>
+</span><span class='line'>BUILD SUCCESSFUL
+</span><span class='line'>Total time: 0 seconds</span></code></pre></td></tr></table></div></figure>
+
+
+<p>すると自動的に Ant が実行され, このようなログが表示されます。dump.txt を見てみましょう。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>path=xxx\honeyant-example\src\main\java\monzou\honeyant\example\source\Person.java
+</span><span class='line'>class : monzou.honeyant.example.source.Person
+</span><span class='line'>package : monzou.honeyant.example.source
+</span><span class='line'>fields -&gt;
+</span><span class='line'>  name (java.lang.String)
+</span><span class='line'>  age (int)
+</span><span class='line'>  sex (java.lang.String)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>このように編集後のクラス定義を元にファイルが自動生成されています。ここで実行しているのは <a href="https://github.com/monzou/honeyant/blob/master/honeyant-example/src/main/java/monzou/honeyant/example/task/DumpTask.java"><code>DumpTask</code></a> というサンプルの Ant タスクで, クラス情報をリフレクションして適当に出力しています。</p>
+
+<h2>何故つくったか？</h2>
+
+<p>2 年程前に仕事で新しいパッケージプロダクトを作ることになり, そのときにつくったものです（もちろん同じものではなく, 全体的にリファインして HoneyAnt として公開しています）。当時 <a href="http://www.hibernate.org/">Hibernate</a> を使っていたのですが, 折角 O/R マッパーを使っているのにタイプセーフにクエリが書けないことに不満を感じていました。Hibernate には Criteria API というものが存在し, これを使うとある程度オブジェクト指向的にクエリを書くことが出来るのですが, これは（属性名の文字列指定や型情報の欠落を伴う）ランタイムバインドを行うもので, 安全性・保守性・生産性の面から好ましくありませんでした。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// Hibernate の Criteria API</span>
+</span><span class='line'><span class="c1">// プロパティ名を文字列で指定。引数も Object 型。</span>
+</span><span class='line'><span class="n">Criteria</span> <span class="n">criteria</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">createCriteria</span><span class="o">(</span><span class="n">Cat</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'><span class="n">criteria</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Restrictions</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="s">&quot;Fritz%&quot;</span><span class="o">));</span>
+</span><span class='line'><span class="n">criteria</span><span class="o">.</span><span class="na">add</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">Restrictions</span><span class="o">.</span><span class="na">or</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">Restrictions</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="s">&quot;age&quot;</span><span class="o">,</span> <span class="mi">0</span><span class="o">),</span> <span class="c1">// 文字列でもバインド出来てしまう</span>
+</span><span class='line'>    <span class="n">Restrictions</span><span class="o">.</span><span class="na">isNull</span><span class="o">(</span><span class="s">&quot;age&quot;</span><span class="o">)</span> <span class="c1">// プロパティ名を間違えたらランタイムエラーになる</span>
+</span><span class='line'>  <span class="o">)</span>
+</span><span class='line'><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>「どうにかタイプセーフに出来ないものか」と悩んでいた当時, <a href="https://sites.google.com/site/slim3appengine/">Slim3</a> のタイプセーフなクエリに感銘を受けて「コレだ！」と思ったのでした。リフレクションを使うのではなく, 予めエンティティのメタ情報を定義しておき, これを用いてクライテリアを表現すればパフォーマンス面でも型安全性の面でも良いのだと気付いたのでした。また 「折角メタ情報を作るのであれば, エンティティのメタ定義からエンティティ, DDL, hbm, クライテリア用のメタクラスも全て自動生成すれば夢が広がるなぁ」などと思いつき, これを実現する方法を考えてみることにしました。</p>
+
+<p>自動生成の実現にあたって, 最初は Slim3 と同じように <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/apt/index.html">APT (Annotation Processing Tool)</a> を用いた自動生成を行おうとしたのですが, APT は意外と自由度が低くファイルの自動生成にはあまり向いていないなと感じました。当初エンティティのメタ情報を Java もしくは Groovy クラスとして定義し, そのクラス情報をリフレクション経由で取得してファイルを自動生成しようとしていたのですが, APT を使うと修正しているファイルのクラス情報を完全に取得することが出来ません（でした……今は違うのかもしれません）。「特定のファイルを編集したときに, もっと自由に自動生成したいなぁ」と思い, Eclipse の Ant を自動的に実行すれば良いかな、と思いついたのでひとまず Eclipse の Plugin をプロトタイプしてみることにしました。Plugin の作り方なんてさっぱり知らなかったのですが, 本やコードを読みながら 2〜3 日ほどかけて実装してみると, 思いのほか上手くいったので APT は止めて Eclipse Plugin にすることにしました。結果的にできあがったのが HoneyAnt でした。</p>
+
+<h2>実際にどのように使ったか？</h2>
+
+<p>さて, 当時の PJ ではエンティティは全てメタ定義（Java クラス・ランタイムでアプリケーションに含まれない）を元に HoneyAnt で自動生成しました。例えば <a href="http://www.redmine.org/">Redmine</a> のようなプロジェクト管理アプリケーションの「プロジェクト」をサンプルにすると, メタ定義はこんな感じです（適当な例にしています）。テーブル名やカラム名をデフォルトで推測したり, Hibernate の主要な機能は一通り使えるようにしたりしました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@HoneyAnt</span><span class="o">(</span><span class="s">&quot;ユーザー&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserSource</span> <span class="kd">extends</span> <span class="n">ClassSource</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;ID&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">NumberProperty</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">id</span> <span class="o">=</span> <span class="n">sequenceIdProperty</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;名前&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">StringProperty</span> <span class="n">name</span> <span class="o">=</span> <span class="n">stringProperty</span><span class="o">(</span><span class="mi">20</span><span class="o">).</span><span class="na">notNull</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;メールアドレス&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">StringProperty</span> <span class="n">email</span> <span class="o">=</span> <span class="n">stringProperty</span><span class="o">(</span><span class="mi">50</span><span class="o">).</span><span class="na">notNull</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;管理者&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">BooleanProperty</span> <span class="n">admin</span> <span class="o">=</span> <span class="n">primitiveBooleanProperty</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;ステータス&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">UserTypeProperty</span><span class="o">&lt;</span><span class="n">UserStatus</span><span class="o">&gt;</span> <span class="n">status</span> <span class="o">=</span> <span class="n">userTypeProperty</span><span class="o">(</span><span class="n">UserStatus</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">notNull</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@HoneyAnt</span><span class="o">(</span><span class="s">&quot;プロジェクト&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProjectSource</span> <span class="kd">extends</span> <span class="n">ClassSource</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;ID&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">NumberProperty</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">id</span> <span class="o">=</span> <span class="n">sequenceIdProperty</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;序数&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">NumberProperty</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">sequenceNo</span> <span class="o">=</span> <span class="n">primitiveIntProperty</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;名称&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">StringProperty</span> <span class="n">name</span> <span class="o">=</span> <span class="n">stringProperty</span><span class="o">(</span><span class="mi">50</span><span class="o">).</span><span class="na">notNull</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;ステータス&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">UserTypeProperty</span><span class="o">&lt;</span><span class="n">ProjectStatus</span><span class="o">&gt;</span> <span class="n">status</span> <span class="o">=</span> <span class="n">userTypeProperty</span><span class="o">(</span><span class="n">ProjectStatus</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">notNull</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Property</span><span class="o">(</span><span class="s">&quot;メンバー&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="nd">@Index</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;IXA_PROJECT_01&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">ManyToManyProperty</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;&gt;</span> <span class="n">users</span> <span class="o">=</span> <span class="n">manyToMany</span><span class="o">(</span><span class="n">UserSource</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">&quot;PROJECT_USER_RELATION&quot;</span><span class="o">).</span><span class="na">lazy</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>このファイルからおおよそ以下が HoneyAnt により自動生成されます。</p>
+
+<ol>
+<li>エンティティ・エンティティの基底クラス（Generation Gap パターン）</li>
+<li>エンティティメタクラス・エンティティメタ基底クラス（Generation Gap パターン）</li>
+<li>hbm</li>
+<li>DDL</li>
+<li>テーブル定義書等</li>
+</ol>
+
+
+<p>これだけでも十分便利なのですが, このときに一番実現したかったものは「タイプセーフなクエリ」です。これを実現する際の肝になっているのが 2. の「エンティティメタクラス」です。このメタクラスを使用してタイプセーフクライテリアを実現しました。タイプセーフクライテリアの実現に当たっては, まずタイプセーフなクライテリア API を作り, 次に HoneyAnt でこの API を利用したエンティティメタクラスを自動生成するようにしました。エンティティメタクラスを利用したタイプセーフなクライテリアは, 以下の場面で使用しました。</p>
+
+<ul>
+<li>DAO（Hibernate の Criteria API に変換してタイプセーフなクエリを実現）</li>
+<li>継続クエリ（OQL に変換してサーバサイドに登録し, メッセージフィルタとして使用）</li>
+</ul>
+
+
+<p>クライテリア API を独立させることによって, 様々な場面で活用出来る拡張性を持たせています。パーサさえ書けば様々な要素にバインド出来るので, <a href="http://www.mongodb.org/">MongoDB</a> 用のアダプタなんかも作ろうかなと思っていました（このときは使用しなかったので作りませんでしたが）。</p>
+
+<p>では実際に使う場合の簡単な例を紹介します。DAO として使用する場合はこんな感じです（クエリの意味は適当ですスミマセン）。ここではひとつずつ検索条件をその場で作っていますが、<a href="http://rubyonrails.org/">Rails</a> の Named Scope のようにメタクラスに条件を定義することも出来ます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">ProjectMeta</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">ProjectMeta</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
+</span><span class='line'><span class="n">Dao</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">dao</span> <span class="o">=</span> <span class="n">daoFactory</span><span class="o">.</span><span class="na">createDao</span><span class="o">(</span><span class="n">meta</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ex. update</span>
+</span><span class='line'><span class="n">dao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">project</span><span class="o">);</span>
+</span><span class='line'><span class="n">dao</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">project</span><span class="o">);</span>
+</span><span class='line'><span class="n">dao</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">project</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ex. entity-query（エンティティ単位）</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="n">EntityQuery</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">query</span> <span class="o">=</span> <span class="n">dao</span><span class="o">.</span><span class="na">createQuery</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">query</span><span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">id</span><span class="o">,</span> <span class="n">Order</span><span class="o">.</span><span class="na">ASC</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">Criteria</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">criteria</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="na">createCriteria</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">sequenceNo</span><span class="o">.</span><span class="na">lt</span><span class="o">(</span><span class="mi">5</span><span class="o">)).</span><span class="na">add</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">ProjectStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">projects</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">list</span><span class="o">(</span><span class="n">criteria</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ex. projection-query（射影）</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="n">ProjectionQuery</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">query</span> <span class="o">=</span> <span class="n">dao</span><span class="o">.</span><span class="na">createProjectionQuery</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">Criteria</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">criteria</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="na">createCriteria</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">users</span><span class="o">.</span><span class="na">admin</span><span class="o">.</span><span class="na">isTrue</span><span class="o">()).</span><span class="na">add</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">users</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">UserStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">List</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">userIds</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">listValues</span><span class="o">(</span><span class="n">criteria</span><span class="o">,</span> <span class="n">meta</span><span class="o">.</span><span class="na">id</span><span class="o">);</span> <span class="c1">// もちろん複数プロパティの射影も可能</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ex. aggregation-query（集約）</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="n">AggregationQuery</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">query</span> <span class="o">=</span> <span class="n">dao</span><span class="o">.</span><span class="na">createAggregationQuery</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">AggregationFunctionProperty</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="n">maxUserIdProperty</span> <span class="o">=</span> <span class="n">Aggregations</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">users</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">Criteria</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">criteria</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="na">createCriteria</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="mi">1L</span><span class="o">)).</span><span class="na">add</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">UserStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">Long</span> <span class="n">maxUserId</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">uniqueValue</span><span class="o">(</span><span class="n">criteria</span><span class="o">,</span> <span class="n">maxUserIdProperty</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>見ての通り一通りタイプセーフにクエリが出来るようになっています。当然ですがクライテリアには強い型制約を持たせています。上記の例ではプロパティ同士の比較はしていませんが, 例えばプロパティ同士の比較クライテリオン ge (greater than or equals to) はこんな感じのシグネチャです。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// E はエンティティの型・C は比較される値の型</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">E</span><span class="o">,</span> <span class="n">C</span> <span class="kd">extends</span> <span class="n">Comparable</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">C</span><span class="o">&gt;&gt;</span> <span class="n">PropertyCompareCriterion</span><span class="o">&lt;</span><span class="n">E</span><span class="o">,</span> <span class="n">C</span><span class="o">,</span> <span class="n">ComparableProperty</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">,</span> <span class="n">C</span><span class="o">&gt;&gt;</span> <span class="n">ge</span><span class="o">(</span><span class="n">ComparableProperty</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">,</span> <span class="n">C</span><span class="o">&gt;</span> <span class="n">condition</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>かなり強い型制約を持たせていることが分かるかと思います。</p>
+
+<p>継続クエリとして使用するときも同じクライテリア API を用いることが出来ます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">ProjectMeta</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">ProjectMeta</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
+</span><span class='line'><span class="n">Criteria</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="n">criteria</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="na">createCriteria</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">ProjectStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">));</span>
+</span><span class='line'><span class="n">CriteriaFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="n">CriteriaFilterFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">criteria</span><span class="o">);</span>
+</span><span class='line'><span class="kt">boolean</span> <span class="n">b</span> <span class="o">=</span> <span class="n">filter</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">project</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同じ API を使用しているので, 検索条件をひとつ作れば DB アクセスにも継続フィルタを使用した非同期更新キャッシュなんかにも使うことが出来ます。</p>
+
+<h2>というわけで</h2>
+
+<p>色々な用途に使えると思うので, 良ければご自由にお使い下さい。</p>
+
+<p>Java で DSL を作るのは難しいです。DSL を定義するのであれば Groovy や Ruby を使った方がよほど楽でしょう。ですので Java で DSL を無理矢理つくるよりは、タイプセーフなメタ情報を自動生成するのが個人的にはオススメです。今なら <a href="http://www.eclipse.org/Xtext/">Xtext</a> を使うのもひとつ有効な手段なのかもしれませんが、使い慣れた Java で Ant タスクとして自動生成処理を定義したい場合には HoneyAnt を使うのも良いかなと思います。</p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post">
